@@ -1,0 +1,30 @@
+  public void createSchedule() {
+    if (players.size() % 2 != 0) { // Uneven number of players - add a bye
+      players.add(new Prisoner());
+    }
+    int totalGames = players.size() - 1;
+    int halfSize = players.size() / 2;
+    // Split players into two groups to later pair up.
+    List<Prisoner> a = players.subList(0, halfSize);
+    List<Prisoner> b = players.subList(halfSize, players.size());
+    List<Prisoner> mergeList = new ArrayList<Prisoner>();
+    for (int game = 0; game < totalGames; game++) {
+      ArrayList<Prisoner[]> currentGame = new ArrayList<Prisoner[]>(); // New empty game array
+      // Create matchups from group a and group b.
+      for (int i = 0; i < halfSize; i++) {
+        Prisoner[] matchUp = {a.get(i), b.get(i)};
+        currentGame.add(matchUp); // Add the matchup to the current game.
+      }
+      schedule.add(currentGame); // Add new game to the schedule.
+      // Merge and rotate players into a new list.
+      mergeList.clear();
+      mergeList.add(a.get(0));
+      mergeList.add(b.get(0));
+      mergeList.addAll(a.subList(1, a.size() - 1));
+      mergeList.addAll(b.subList(1, b.size()));
+      mergeList.add(a.get(a.size() - 1));
+      // Split the merged list back into two groups for the next game.
+      a = new ArrayList<Prisoner>(mergeList.subList(0, halfSize));
+      b = new ArrayList<Prisoner>(mergeList.subList(halfSize, mergeList.size()));
+    }
+  }
